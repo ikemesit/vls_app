@@ -25,7 +25,7 @@ class _SignInPageState extends State<SignInPage> {
 
     return Scaffold(
       backgroundColor: TColors.white,
-      appBar: AppBar(),
+      appBar: AppBar(backgroundColor: TColors.white),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Column(
@@ -36,7 +36,7 @@ class _SignInPageState extends State<SignInPage> {
             Center(
               child: Image(
                 image: const AssetImage(TImages.loginOrSignupImage),
-                height: 300.0,
+                height: 250.0,
               ),
             ),
             Text(
@@ -83,6 +83,7 @@ class _SignInPageState extends State<SignInPage> {
                   Gap(10.0),
                   TextFormField(
                     controller: passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       label: Text(
                         'Enter your password',
@@ -114,7 +115,10 @@ class _SignInPageState extends State<SignInPage> {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          SnackBar(content: Text(e.toString())),
+                                          SnackBar(
+                                            content: Text(e.toString()),
+                                            backgroundColor: TColors.error,
+                                          ),
                                         );
                                       }
                                     }

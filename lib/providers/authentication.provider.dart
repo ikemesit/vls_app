@@ -20,16 +20,12 @@ class AuthProvider with ChangeNotifier {
     final session = _authService.getCurrentSession();
     if (session != null) {
       _user = AppUser.fromSession(session.user);
-      print("Init Auth State");
-      print(_user?.id);
     }
 
     // Listen for auth state changes
     _authService.authStateChanges.listen((authState) {
       final session = authState.session;
       _user = session != null ? AppUser.fromSession(session.user) : null;
-      print("Stream Auth State");
-      print(_user?.id);
       notifyListeners();
     });
   }
@@ -78,6 +74,21 @@ class AuthProvider with ChangeNotifier {
 
     try {
       await _authService.signOut();
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  updatePassword({required String newPassword}) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _authService.updatePassword(newPassword: newPassword);
       _isLoading = false;
       notifyListeners();
     } catch (e) {

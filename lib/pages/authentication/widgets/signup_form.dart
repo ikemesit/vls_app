@@ -15,13 +15,13 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    final signUpFormKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
 
     return Form(
-      key: formKey,
+      key: signUpFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -91,7 +91,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     (context, auth, _) => Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (formKey.currentState!.validate()) {
+                          if (signUpFormKey.currentState!.validate()) {
                             try {
                               await auth.signUp(
                                 email: emailController.text,

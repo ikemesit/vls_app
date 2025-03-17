@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:provider/provider.dart';
-import 'package:vls_app/providers/donation.provider.dart';
 import 'package:vls_app/utils/constants/colors.dart';
 import 'package:vls_app/utils/theme/custom_themes/text_theme.dart';
 

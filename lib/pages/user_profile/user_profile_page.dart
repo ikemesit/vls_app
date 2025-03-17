@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/models/user_profile.model.dart';
 import 'package:vls_app/pages/authentication/sign_in_page.dart';
 import 'package:vls_app/pages/user_profile/widgets/edit_user_profile.dart';
-import 'package:vls_app/providers/authentication.provider.dart';
+import 'package:vls_app/pages/user_profile/widgets/user_profile_setup.dart';
 import 'package:vls_app/providers/user_profile.provider.dart';
 import 'package:vls_app/utils/constants/colors.dart';
 import 'package:vls_app/utils/constants/image_strings.dart';
@@ -25,7 +24,13 @@ class UserProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile'),
+        title: Text(
+          'My Profile',
+          style: TTextTheme.lightTextTheme.headlineSmall?.copyWith(
+            color: TColors.white,
+          ),
+        ),
+        centerTitle: true,
         actions: [
           Consumer<UserProfileProvider>(
             builder:
@@ -57,7 +62,7 @@ class UserProfilePage extends StatelessWidget {
                   height: 300.0,
                 ),
                 Gap(40.0),
-                Text('Please log in to view your profile'),
+                Text('You need to set up your profile'),
                 Gap(20.0),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -69,10 +74,12 @@ class UserProfilePage extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => SignInPage()),
+                              MaterialPageRoute(
+                                builder: (_) => UserProfileSetupScreen(),
+                              ),
                             );
                           },
-                          child: Text('Sign In'),
+                          child: Text('Setup your profile'),
                         ),
                       ),
                     ),
@@ -81,8 +88,6 @@ class UserProfilePage extends StatelessWidget {
               ],
             );
           }
-
-          //
 
           final profile = provider.profile;
           return SingleChildScrollView(
@@ -171,9 +176,11 @@ class UserProfilePage extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TTextTheme.lightTextTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        SizedBox(height: 8),
+        Gap(2.0),
         Card(
           color: TColors.white,
           child: Padding(
@@ -181,7 +188,7 @@ class UserProfilePage extends StatelessWidget {
             child: Column(children: items),
           ),
         ),
-        SizedBox(height: 16),
+        Gap(16.0),
       ],
     );
   }

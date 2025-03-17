@@ -39,6 +39,14 @@ class AuthService {
     }
   }
 
+  Future<void> updatePassword({required String newPassword}) async {
+    try {
+      await supabase.auth.updateUser(UserAttributes(password: newPassword));
+    } catch (e) {
+      throw Exception('Password update failed: $e');
+    }
+  }
+
   // Get current session
   Session? getCurrentSession() => supabase.auth.currentSession;
 

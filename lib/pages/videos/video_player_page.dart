@@ -8,10 +8,10 @@ class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key, required this.video});
 
   @override
-  _VideoPlayerPageState createState() => _VideoPlayerPageState();
+  VideoPlayerPageState createState() => VideoPlayerPageState();
 }
 
-class _VideoPlayerPageState extends State<VideoPlayerPage> {
+class VideoPlayerPageState extends State<VideoPlayerPage> {
   late YoutubePlayerController _controller;
 
   @override
@@ -33,25 +33,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.video.title)),
-      body: Column(
-        children: [
-          YoutubePlayer(
-            controller: _controller,
-            aspectRatio: 9 / 16,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            onReady: () {
-              // Optional: Add any initialization logic here
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.video.title,
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+      body: SafeArea(
+        child: Column(
+          children: [
+            YoutubePlayer(
+              controller: _controller,
+              aspectRatio: 9 / 16,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.blueAccent,
+              onReady: () {
+                // Optional: Add any initialization logic here
+              },
             ),
-          ),
-        ],
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Text(
+            //     widget.video.title,
+            //     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

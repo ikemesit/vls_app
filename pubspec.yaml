@@ -52,8 +52,6 @@ dependencies:
   carousel_slider: ^5.0.0
   flutter_rating_bar: ^4.0.1
   capped_progress_indicator: ^0.0.2
-
-  # Supabase
   supabase_flutter: ^2.8.3
   provider: ^6.1.2
   get: ^4.7.2
@@ -62,6 +60,12 @@ dependencies:
   lottie: ^3.3.1
   youtube_player_flutter: ^9.1.1
   share_plus: ^10.1.4
+  image_picker: ^1.0.0
+  path_provider: ^2.0.0
+  path: ^1.8.0
+  another_flushbar: ^1.12.30
+  flutter_launcher_icons: ^0.14.3
+  change_app_package_name: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -88,8 +92,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/logos/
-    - assets/images/on_boarding_images/
     - assets/icons/
+    - assets/icons/animations/
     - assets/images/content/
 
   # An image asset can refer to one or more resolution-specific "variants", see

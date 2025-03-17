@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:vls_app/pages/authentication/sign_in_page.dart';
 import 'package:vls_app/pages/authentication/widgets/auth_wrapper.dart';
 import 'package:vls_app/providers/authentication.provider.dart';
 import 'package:vls_app/providers/donation.provider.dart';
 import 'package:vls_app/providers/event.provider.dart';
+import 'package:vls_app/providers/post.provider.dart';
+import 'package:vls_app/providers/profile_picture.provider.dart';
 import 'package:vls_app/providers/user_profile.provider.dart';
 import 'package:vls_app/providers/video.provider.dart';
+import 'package:vls_app/providers/volunteer_ad.provider.dart';
 import 'package:vls_app/utils/theme/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,9 +26,20 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => EventsProvider()),
+        ChangeNotifierProvider(create: (_) => PostsProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProfileProvider()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
+        ChangeNotifierProvider(create: (_) => VolunteerAdProvider()),
+        ChangeNotifierProxyProvider<AuthProvider, ProfilePictureProvider>(
+          create:
+              (context) => ProfilePictureProvider(
+                Provider.of<AuthProvider>(context, listen: false).user?.id,
+              ),
+          update:
+              (context, auth, previous) =>
+                  ProfilePictureProvider.update(auth.user?.id),
+        ),
         ChangeNotifierProxyProvider<AuthProvider, DonationProvider>(
           create:
               (context) => DonationProvider(
@@ -36,13 +50,14 @@ Future<void> main() async {
                   DonationProvider.update(auth.user?.id, previous),
         ),
         // ChangeNotifierProxyProvider<AuthProvider, UserProfileProvider>(
-        //   create: (context) => UserProfileProvider(userId:
-        //     Provider.of<AuthProvider>(context, listen: false).user?.id,
-        //   ),
-        //   update: (context, auth, previous) => UserProfileProvider.update(
-        //     auth.user?.id,
-        //     previous,
-        //   ),
+        //   create:
+        //       (context) => UserProfileProvider(
+        //         Provider.of<AuthProvider>(context, listen: false).user?.id
+        //             as String,
+        //       ),
+        //   update:
+        //       (context, auth, previous) =>
+        //           UserProfileProvider.update(auth.user?.id, previous),
         // ),
       ],
       child: const MyApp(),

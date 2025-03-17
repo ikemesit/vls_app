@@ -7,17 +7,22 @@ class UserProfileProvider with ChangeNotifier {
 
   UserProfile? _profile;
   bool _isLoading = false;
-
   String? userId;
 
   UserProfile? get profile => _profile;
   bool get isLoading => _isLoading;
 
-  UserProfileProvider();
+  UserProfileProvider() {
+    // if (userId != null) {
+    // _initProfile();
+    // }
+  }
 
   UserProfileProvider.update(this.userId, UserProfileProvider? previous) {
-    _profile = previous?._profile;
-    _initProfile();
+    if (userId != null) {
+      _profile = previous?._profile;
+      _initProfile();
+    }
   }
 
   void _initProfile() {
@@ -33,7 +38,6 @@ class UserProfileProvider with ChangeNotifier {
   Future<void> fetchUserProfile(String userId) async {
     _isLoading = true;
     notifyListeners();
-
     try {
       _profile = await _service.getUserProfile(userId);
       _isLoading = false;

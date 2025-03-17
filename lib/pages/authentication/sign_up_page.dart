@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:vls_app/pages/authentication/widgets/signup_form.dart';
 
 import '../../utils/constants/colors.dart';
@@ -26,21 +27,31 @@ class SignUp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image(image: AssetImage('assets/logos/vls-splash-logo.jpg')),
+            Container(
+              width: double.infinity,
+              height: 250.0,
+              color: TColors.primary,
+              child: Center(
+                child: Image(
+                  image: AssetImage('assets/logos/vls-logo-rounded.png'),
+                  width: 200.0,
+                  height: 200.0,
+                ),
+              ),
+            ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 30.0,
-                  vertical: 20.0,
+                  horizontal: 20.0,
+                  vertical: 10.0,
                 ),
                 child: Text(
                   'Sign up to become a member of VLS',
-                  style: TTextTheme.lightTextTheme.headlineMedium,
+                  style: TTextTheme.lightTextTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            Gap(20.0),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,

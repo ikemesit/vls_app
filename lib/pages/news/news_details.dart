@@ -32,8 +32,8 @@ class NewsDetails extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: imageUrl,
               width: double.infinity,
-              height: 300.0,
-              fit: BoxFit.cover,
+              // height: 300.0, //TODO ensure pictures maintain 1280x720 size (communicate with client)
+              fit: BoxFit.contain,
               progressIndicatorBuilder:
                   (context, url, progress) => Center(
                     child: CircularProgressIndicator(value: progress.progress),
@@ -65,7 +65,20 @@ class NewsDetails extends StatelessWidget {
                     thickness: 1.0,
                     height: 50.0,
                   ),
-                  Html(data: excerpt),
+                  Wrap(
+                    children: [
+                      Html(
+                        data: excerpt.replaceAll('&nbsp;', ' '),
+                        style: {
+                          "p": Style(
+                            whiteSpace: WhiteSpace.pre,
+                            textAlign: TextAlign.left,
+                            display: Display.block,
+                          ),
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

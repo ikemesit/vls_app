@@ -24,14 +24,20 @@ class VideoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: video.thumbnailUrl,
-              width: double.infinity,
-              height: 200.0,
-              fit: BoxFit.cover,
-              placeholder:
-                  (context, url) => Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12.0),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: video.thumbnailUrl,
+                width: double.infinity,
+                height: 200.0,
+                fit: BoxFit.cover,
+                placeholder:
+                    (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

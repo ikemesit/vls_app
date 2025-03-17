@@ -1,8 +1,12 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/models/user_profile.model.dart';
 import 'package:vls_app/providers/user_profile.provider.dart';
+import 'package:vls_app/utils/constants/colors.dart';
+import 'package:vls_app/utils/constants/image_strings.dart';
 import 'package:vls_app/utils/theme/custom_themes/text_theme.dart';
 
 class EditUserProfilePage extends StatefulWidget {
@@ -11,10 +15,10 @@ class EditUserProfilePage extends StatefulWidget {
   const EditUserProfilePage({super.key, required this.profile});
 
   @override
-  _EditUserProfilePageState createState() => _EditUserProfilePageState();
+  EditUserProfilePageState createState() => EditUserProfilePageState();
 }
 
-class _EditUserProfilePageState extends State<EditUserProfilePage> {
+class EditUserProfilePageState extends State<EditUserProfilePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _firstNameController;
   late TextEditingController _middleNameController;
@@ -56,7 +60,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Profile')),
+      appBar: AppBar(centerTitle: true, title: Text('Edit Profile')),
       body: Consumer<UserProfileProvider>(
         builder:
             (context, provider, _) => SingleChildScrollView(
@@ -64,8 +68,15 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Gap(50.0),
+                    Text(
+                      'First Name',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _firstNameController,
                       decoration: InputDecoration(
@@ -78,6 +89,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       validator: (value) => value!.isEmpty ? 'Required' : null,
                     ),
                     Gap(20.0),
+                    Text(
+                      'Middle Name',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _middleNameController,
                       decoration: InputDecoration(
@@ -89,6 +106,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       ),
                     ),
                     Gap(20.0),
+                    Text(
+                      'Last Name',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _lastNameController,
                       decoration: InputDecoration(
@@ -101,6 +124,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       validator: (value) => value!.isEmpty ? 'Required' : null,
                     ),
                     Gap(20.0),
+                    Text(
+                      'Phone',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _phoneController,
                       decoration: InputDecoration(
@@ -113,6 +142,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       validator: (value) => value!.isEmpty ? 'Required' : null,
                     ),
                     Gap(20.0),
+                    Text(
+                      'Address',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
@@ -125,6 +160,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       validator: (value) => value!.isEmpty ? 'Required' : null,
                     ),
                     Gap(20.0),
+                    Text(
+                      'City',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _cityController,
                       decoration: InputDecoration(
@@ -137,6 +178,12 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                       validator: (value) => value!.isEmpty ? 'Required' : null,
                     ),
                     Gap(20.0),
+                    Text(
+                      'State',
+                      style: TTextTheme.lightTextTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     TextFormField(
                       controller: _stateController,
                       decoration: InputDecoration(
@@ -186,16 +233,51 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
 
                                           if (context.mounted) {
                                             Navigator.of(context).pop();
+                                            Flushbar(
+                                              title: "Success",
+                                              message: "Profile Updated!",
+                                              duration: Duration(seconds: 3),
+                                              backgroundColor: TColors.success,
+                                              flushbarStyle:
+                                                  FlushbarStyle.FLOATING,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              padding: EdgeInsets.all(20.0),
+                                              margin: EdgeInsets.symmetric(
+                                                vertical: 20.0,
+                                                horizontal: 10.0,
+                                              ),
+                                              icon: Lottie.asset(
+                                                TImages.animatedSuccess,
+                                                repeat: false,
+                                              ),
+                                            ).show(context);
                                           }
                                         } catch (e) {
                                           if (context.mounted) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(e.toString()),
+                                            Flushbar(
+                                              title: "Error",
+                                              message:
+                                                  'Could not update profile',
+                                              duration: Duration(seconds: 3),
+                                              animationDuration: Duration(
+                                                milliseconds: 590,
                                               ),
-                                            );
+                                              backgroundColor: TColors.error,
+                                              flushbarStyle:
+                                                  FlushbarStyle.FLOATING,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              padding: EdgeInsets.all(20.0),
+                                              margin: EdgeInsets.symmetric(
+                                                vertical: 20.0,
+                                                horizontal: 10.0,
+                                              ),
+                                              icon: Lottie.asset(
+                                                TImages.animatedError,
+                                                repeat: false,
+                                              ),
+                                            ).show(context);
                                           }
                                         }
                                       }
