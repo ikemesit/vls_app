@@ -35,31 +35,34 @@ class VideosPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<VideoProvider>(
-        builder: (context, provider, _) {
-          if (provider.isLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (provider.videos.isEmpty) {
-            return Center(
-              child: Column(
-                children: [
-                  Image(image: AssetImage(TImages.noDataImage)),
-                  Gap(10.0),
-                  Text('No videos available'),
-                ],
-              ),
+      body: SafeArea(
+        child: Consumer<VideoProvider>(
+          builder: (context, provider, _) {
+            if (provider.isLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (provider.videos.isEmpty) {
+              return Center(
+                child: Column(
+                  children: [
+                    Image(image: AssetImage(TImages.noDataImage)),
+                    Gap(10.0),
+                    Text('No videos available'),
+                  ],
+                ),
+              );
+            }
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              itemCount: provider.videos.length,
+              itemBuilder: (context, index) {
+                final video = provider.videos[index];
+                return VideoCard(video: video);
+              },
+              separatorBuilder: (context, index) => Gap(8.0),
             );
-          }
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            itemCount: provider.videos.length,
-            itemBuilder: (context, index) {
-              final video = provider.videos[index];
-              return VideoCard(video: video);
-            },
-          );
-        },
+          },
+        ),
       ),
     );
   }

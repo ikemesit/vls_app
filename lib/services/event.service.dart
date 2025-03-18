@@ -35,7 +35,7 @@ class EventsService {
     }
   }
 
-  Future<EventAttendance> fetchEventAttendanceByUserId(
+  Future<EventAttendance?> fetchEventAttendanceByUserId(
     String eventId,
     String userId,
   ) async {
@@ -46,11 +46,13 @@ class EventsService {
               .select()
               .eq('event_id', eventId)
               .eq('profile_id', userId)
-              .single();
+              .maybeSingle();
 
-      print(response);
-
-      return EventAttendance.fromJson(json: response);
+      if (response != null) {
+        return EventAttendance.fromJson(json: response);
+      } else {
+        return null;
+      }
     } catch (e) {
       throw Exception('Failed to fetch event attendance: $e');
     }

@@ -22,36 +22,12 @@ class VideoProvider with ChangeNotifier {
       final response = await supabase.from('videos').select();
       _videos = (response as List).map((json) => Video.fromJson(json)).toList();
 
-      // If no Supabase, use hardcoded data as fallback
-      // if (_videos.isEmpty) {
-      //   _videos = [
-      //     Video(
-      //       id: 'dQw4w9WgXcQ',
-      //       title: 'Rick Astley - Never Gonna Give You Up',
-      //       thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg',
-      //       createdAt: DateTime.now(),
-      //     ),
-      //     Video(
-      //       id: '9bZkp7q19f0',
-      //       title: 'PSY - GANGNAM STYLE',
-      //       thumbnailUrl: 'https://img.youtube.com/vi/9bZkp7q19f0/0.jpg',
-      //       createdAt: DateTime.now(),
-      //     ),
-      //     Video(
-      //       id: 'JGwWNGJdvx8',
-      //       title: 'Ed Sheeran - Shape of You',
-      //       thumbnailUrl: 'https://img.youtube.com/vi/JGwWNGJdvx8/0.jpg',
-      //       createdAt: DateTime.now(),
-      //     ),
-      //   ];
-      // }
       _isLoading = false;
       notifyListeners();
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      // Log error or handle as needed
-      print('Error fetching videos: $e');
+      throw Exception('Error fetching videos: $e ');
     }
   }
 

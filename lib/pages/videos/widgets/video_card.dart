@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vls_app/models/video.model.dart';
 import 'package:vls_app/pages/videos/video_player_page.dart';
 import 'package:vls_app/utils/constants/colors.dart';
@@ -16,11 +17,11 @@ class VideoCard extends StatelessWidget {
       color: TColors.white,
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: InkWell(
-        onTap:
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => VideoPlayerPage(video: video)),
-            ),
+        onTap: _launchURL,
+        // () => Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (_) => VideoPlayerPage(video: video)),
+        // ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -76,15 +77,22 @@ class VideoCard extends StatelessWidget {
   }
 
   void _shareVideo(BuildContext context, Video video) {
-    final url = 'https://www.youtube.com/watch?v=${video.id}';
-    Share.share('Check out this video: ${video.title}\n$url');
+    // final url = 'https://www.youtube.com/watch?v=${video.id}';
+    Share.share('Check out this video: ${video.title}\n$video.url');
   }
 
   void _copyLink(BuildContext context, Video video) {
-    final url = 'https://www.youtube.com/watch?v=${video.id}';
-    Share.share(url);
+    // final url = 'https://www.youtube.com/watch?v=${video.id}';
+    Share.share(video.url);
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
+  }
+
+  void _launchURL() async {
+    final Uri url = Uri.parse(video.url);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

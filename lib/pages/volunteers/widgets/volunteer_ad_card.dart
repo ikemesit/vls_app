@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/volunteer_ad.model.dart';
@@ -32,11 +33,16 @@ class VolunteerAdCard extends StatelessWidget {
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text(
-                ad.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 14.0, color: Colors.grey[600]),
+              Html(
+                data:
+                    '${ad.description.substring(0, 15).replaceAll('&nbsp;', '')}...',
+                style: {
+                  "p": Style(
+                    whiteSpace: WhiteSpace.pre,
+                    textAlign: TextAlign.left,
+                    display: Display.block,
+                  ),
+                },
               ),
               SizedBox(height: 8),
               Row(

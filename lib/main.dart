@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/pages/authentication/widgets/auth_wrapper.dart';
 import 'package:vls_app/providers/authentication.provider.dart';
+import 'package:vls_app/providers/banners.provider.dart';
 import 'package:vls_app/providers/donation.provider.dart';
 import 'package:vls_app/providers/event.provider.dart';
 import 'package:vls_app/providers/post.provider.dart';
@@ -31,6 +32,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => UserProfileProvider()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
         ChangeNotifierProvider(create: (_) => VolunteerAdProvider()),
+        ChangeNotifierProvider(create: (_) => BannerProvider()),
         ChangeNotifierProxyProvider<AuthProvider, ProfilePictureProvider>(
           create:
               (context) => ProfilePictureProvider(

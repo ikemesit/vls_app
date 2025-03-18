@@ -53,7 +53,7 @@ class _NavigationLayoutState extends State<NavigationLayout> {
         ),
         shadowColor: TColors.black.withAlpha(100),
         backgroundColor: TAppBarTheme.lightAppBarTheme.backgroundColor,
-        title: Text('Volkspartij Leefbaar Suriname'),
+        title: Text('VLS Suriname'), //Volkspartij Leefbaar Suriname
         actions: [
           // Padding(
           //   padding: EdgeInsets.only(right: 16.0),

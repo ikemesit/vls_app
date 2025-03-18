@@ -1,6 +1,8 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/pages/authentication/sign_in_page.dart';
 import 'package:vls_app/pages/authentication/sign_up_page.dart';
@@ -11,6 +13,7 @@ import 'package:vls_app/pages/news/widgets/news_card.dart';
 import 'package:vls_app/pages/home/widgets/quick_action_button.dart';
 import 'package:vls_app/pages/videos/widgets/video_card.dart';
 import 'package:vls_app/pages/volunteers/volunteers_ads_page.dart';
+import 'package:vls_app/providers/banners.provider.dart';
 import 'package:vls_app/providers/event.provider.dart';
 import 'package:vls_app/providers/user_profile.provider.dart';
 import 'package:vls_app/providers/video.provider.dart';
@@ -33,34 +36,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  // final GlobalKey _bottomNavigationKey;
   late TabController _tabController;
-  final List<CarouselItem> carouselItems = [
-    CarouselItem(
-      imageUrl:
-          "https://srmnihaohewhedrqnenm.supabase.co/storage/v1/object/public/images/banners/banner1.jpeg",
-      headline: "Join us for a better Suriname",
-    ),
-    CarouselItem(
-      imageUrl:
-          "https://srmnihaohewhedrqnenm.supabase.co/storage/v1/object/public/images/banners/banner2.jpeg",
-      headline: "All about Suriname",
-    ),
-    CarouselItem(
-      imageUrl:
-          "https://srmnihaohewhedrqnenm.supabase.co/storage/v1/object/public/images/banners/banner3.jpeg",
-      headline: "Interview with Robert Vishnudath",
-    ),
-    CarouselItem(
-      imageUrl:
-          "https://srmnihaohewhedrqnenm.supabase.co/storage/v1/object/public/images/banners/banner4.jpeg",
-      headline: "Join us for a better Suriname",
-    ),
-    CarouselItem(
-      imageUrl: "https://wallpaperaccess.com/full/1940042.jpg",
-      headline: "Join us for a better Suriname",
-    ),
-  ];
+
   final CarouselSliderController _controller = CarouselSliderController();
 
   int _currentSlideIndex = 0;
@@ -119,22 +96,18 @@ class _HomePageState extends State<HomePage>
                   },
                 ),
                 items:
-                    carouselItems.map((item) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return CarouselItem(
-                            imageUrl: item.imageUrl,
-                            headline: item.headline,
-                          );
-                        },
-                      );
-                    }).toList(),
+                    Provider.of<BannerProvider>(context, listen: false).banners
+                        .map((bannerUrl) => CarouselItem(imageUrl: bannerUrl))
+                        .toList(),
               ),
               Gap(10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children:
-                    carouselItems.asMap().entries.map((entry) {
+                    Provider.of<BannerProvider>(
+                      context,
+                      listen: false,
+                    ).banners.asMap().entries.map((entry) {
                       return GestureDetector(
                         onTap: () => _controller.animateToPage(entry.key),
                         child: Container(
@@ -182,13 +155,38 @@ class _HomePageState extends State<HomePage>
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder:
-                                    (BuildContext context) => const SignUp(),
-                              ),
-                            );
+                            if (Provider.of<UserProfileProvider>(
+                                  context,
+                                  listen: false,
+                                ).profile !=
+                                null) {
+                              Flushbar(
+                                title: "Error",
+                                message: 'You are already registered',
+                                duration: Duration(seconds: 3),
+                                animationDuration: Duration(milliseconds: 590),
+                                backgroundColor: TColors.error,
+                                flushbarStyle: FlushbarStyle.FLOATING,
+                                borderRadius: BorderRadius.circular(8.0),
+                                padding: EdgeInsets.all(20.0),
+                                margin: EdgeInsets.symmetric(
+                                  vertical: 20.0,
+                                  horizontal: 10.0,
+                                ),
+                                icon: Lottie.asset(
+                                  TImages.animatedError,
+                                  repeat: false,
+                                ),
+                              ).show(context);
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder:
+                                      (BuildContext context) => const SignUp(),
+                                ),
+                              );
+                            }
                           },
                           child: QuickActionButton(
                             label: 'Join VLS',
@@ -256,6 +254,7 @@ class _HomePageState extends State<HomePage>
                 indicatorColor: TColors.primary,
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorWeight: 2.0,
+                isScrollable: true,
                 labelColor: TColors.primary,
                 unselectedLabelColor: Colors.black,
                 tabs: [
@@ -280,7 +279,10 @@ class _HomePageState extends State<HomePage>
                           return Center(
                             child: Column(
                               children: [
-                                Image(image: AssetImage(TImages.noDataImage)),
+                                Image(
+                                  image: AssetImage(TImages.noDataImage),
+                                  width: 150.0,
+                                ),
                                 Gap(10.0),
                                 Text('No posts available'),
                               ],
@@ -322,7 +324,10 @@ class _HomePageState extends State<HomePage>
                           return Center(
                             child: Column(
                               children: [
-                                Image(image: AssetImage(TImages.noDataImage)),
+                                Image(
+                                  image: AssetImage(TImages.noDataImage),
+                                  width: 150.0,
+                                ),
                                 Gap(10.0),
                                 Text('No events available'),
                               ],
@@ -363,7 +368,10 @@ class _HomePageState extends State<HomePage>
                           return Center(
                             child: Column(
                               children: [
-                                Image(image: AssetImage(TImages.noDataImage)),
+                                Image(
+                                  image: AssetImage(TImages.noDataImage),
+                                  width: 150.0,
+                                ),
                                 Gap(10.0),
                                 Text('No videos available'),
                               ],

@@ -41,23 +41,10 @@ class EventDetails extends StatefulWidget {
 
 class _EventDetailsState extends State<EventDetails> {
   bool isAttendee = false;
+  bool hasFetchedAttendance = false;
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   await Provider.of<EventsProvider>(
-    //     context,
-    //     listen: false,
-    //   ).fetchEventAttendanceByUserId(widget.id, widget.userId);
-    // });
-
-    // isAttendee =
-    //     Provider.of<EventsProvider>(
-    //       context,
-    //       listen: false,
-    //     ).attendance?.eventId !=
-    //     null;
-
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -65,12 +52,20 @@ class _EventDetailsState extends State<EventDetails> {
     });
   }
 
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   isAttendee = false;
+  //   hasFetchedAttendance = false;
+  // }
+
   Future<void> fetchUserAttendance() async {
     final provider = Provider.of<EventsProvider>(context, listen: false);
     await provider.fetchEventAttendanceByUserId(widget.id, widget.userId);
 
     setState(() {
       isAttendee = provider.attendance != null;
+      hasFetchedAttendance = true;
     });
   }
 
@@ -83,16 +78,6 @@ class _EventDetailsState extends State<EventDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // CachedNetworkImage(
-            //   imageUrl: images[0],
-            //   width: double.infinity,
-            //   // height: 300.0, //TODO ensure pictures maintain 1280x720 size (communicate with client)
-            //   fit: BoxFit.cover,
-            //   progressIndicatorBuilder:
-            //       (context, url, progress) => Center(
-            //         child: CircularProgressIndicator(value: progress.progress),
-            //       ),
-            // ),
             SizedBox(
               // width: MediaQuery.of(context).size.width,
               height: 300.0,
@@ -162,59 +147,69 @@ class _EventDetailsState extends State<EventDetails> {
                       Consumer<AuthProvider>(
                         builder: (context, provider, child) {
                           if (provider.isAuthenticated) {
-                            if (isAttendee) {
-                              return Text(
-                                'You are already registered for this event',
-                                style: TTextTheme.lightTextTheme.displayMedium
-                                    ?.copyWith(color: TColors.success),
-                              );
-                            } else {
-                              return FilledButton(
-                                onPressed: () {
-                                  try {
-                                    Provider.of<EventsProvider>(
-                                      context,
-                                      listen: false,
-                                    ).confirmEventAttendance(
-                                      widget.id,
-                                      provider.user!.id,
-                                    );
+                            if (hasFetchedAttendance) {
+                              if (isAttendee) {
+                                return Text(
+                                  'You are already registered for this event',
+                                  style: TTextTheme.lightTextTheme.labelMedium
+                                      ?.copyWith(color: TColors.success),
+                                );
+                              } else {
+                                return FilledButton(
+                                  onPressed: () {
+                                    try {
+                                      Provider.of<EventsProvider>(
+                                        context,
+                                        listen: false,
+                                      ).confirmEventAttendance(
+                                        widget.id,
+                                        provider.user!.id,
+                                      );
 
-                                    THelperFunctions.showAlert(
-                                      context,
-                                      'Success!',
-                                      'You have confirmed your attendance',
-                                      Lottie.asset(
-                                        TImages.animatedSuccess2,
-                                        repeat: false,
-                                        width: 100.0,
-                                        height: 100.0,
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    Flushbar(
-                                      title: "Error",
-                                      message: 'An error occurred',
-                                      duration: Duration(seconds: 3),
-                                      animationDuration: Duration(
-                                        milliseconds: 590,
-                                      ),
-                                      backgroundColor: TColors.error,
-                                      flushbarStyle: FlushbarStyle.FLOATING,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      padding: EdgeInsets.all(20.0),
-                                      margin: EdgeInsets.symmetric(
-                                        vertical: 20.0,
-                                        horizontal: 10.0,
-                                      ),
-                                      icon: Lottie.asset(
-                                        TImages.animatedError,
-                                        repeat: false,
-                                      ),
-                                    ).show(context);
-                                  }
-                                },
-                                child: Text('Confirm attendance'),
+                                      fetchUserAttendance();
+
+                                      THelperFunctions.showAlert(
+                                        context,
+                                        'Success!',
+                                        'You have confirmed your attendance',
+                                        Lottie.asset(
+                                          TImages.animatedSuccess2,
+                                          repeat: false,
+                                          width: 100.0,
+                                          height: 100.0,
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      Flushbar(
+                                        title: "Error",
+                                        message: 'An error occurred',
+                                        duration: Duration(seconds: 3),
+                                        animationDuration: Duration(
+                                          milliseconds: 590,
+                                        ),
+                                        backgroundColor: TColors.error,
+                                        flushbarStyle: FlushbarStyle.FLOATING,
+                                        borderRadius: BorderRadius.circular(
+                                          8.0,
+                                        ),
+                                        padding: EdgeInsets.all(20.0),
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 20.0,
+                                          horizontal: 10.0,
+                                        ),
+                                        icon: Lottie.asset(
+                                          TImages.animatedError,
+                                          repeat: false,
+                                        ),
+                                      ).show(context);
+                                    }
+                                  },
+                                  child: Text('Confirm attendance'),
+                                );
+                              }
+                            } else {
+                              return CircularProgressIndicator(
+                                color: TColors.success,
                               );
                             }
                           } else {
