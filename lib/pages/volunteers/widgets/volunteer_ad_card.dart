@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/volunteer_ad.model.dart';
@@ -14,6 +15,7 @@ class VolunteerAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isExpired = ad.expiresAt.isBefore(DateTime.now());
+
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       color: TColors.white,
@@ -32,10 +34,14 @@ class VolunteerAdCard extends StatelessWidget {
                 ad.title,
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              Gap(8),
+              Divider(color: TColors.grey, thickness: 1.0),
+              Gap(8),
               Html(
                 data:
-                    '${ad.description.substring(0, 15).replaceAll('&nbsp;', '')}...',
+                    ad.description.length > 150
+                        ? '${ad.description.substring(0, 150).replaceAll('&nbsp;', ' ')}...'
+                        : ad.description.replaceAll('&nbsp;', ' '),
                 style: {
                   "p": Style(
                     whiteSpace: WhiteSpace.pre,
@@ -44,7 +50,7 @@ class VolunteerAdCard extends StatelessWidget {
                   ),
                 },
               ),
-              SizedBox(height: 8),
+              Gap(8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

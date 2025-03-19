@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/volunteer_ad.model.dart';
@@ -22,14 +24,23 @@ class VolunteerAdDetailPage extends StatelessWidget {
               ad.title,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            Gap(16),
             Text(
               'Description',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(ad.description, style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 16),
+            Gap(8),
+            Html(
+              data: ad.description.replaceAll('&nbsp;', ' '),
+              style: {
+                "p": Style(
+                  whiteSpace: WhiteSpace.pre,
+                  textAlign: TextAlign.left,
+                  display: Display.block,
+                ),
+              },
+            ),
+            Gap(16),
             Text(
               'Created: ${DateFormat('MMM d, yyyy').format(ad.createdAt)}',
               style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),

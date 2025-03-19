@@ -36,6 +36,7 @@ class VolunteerAdsPage extends StatelessWidget {
             return Center(child: Text('No volunteer opportunities available'));
           }
           return ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
             itemCount: provider.ads.length,
             itemBuilder: (context, index) {
               final ad = provider.ads[index];
