@@ -23,16 +23,22 @@ class ProfilePictureProvider with ChangeNotifier {
     }
   }
 
-  void fetchProfilePicture(String userId) {
+  Future<void> fetchProfilePicture(String userId) async {
     try {
-      final response = supabase.storage
-          .from('profile-pictures')
-          .getPublicUrl('$userId/profile.jpg');
+      final List<FileObject> files =
+          await supabase.storage.from('profile-pictures').list();
 
-      _profilePictureUrl = response;
+      if (files.map((fileObject) => fileObject.name).contains(userId)) {
+        final response = supabase.storage
+            .from('profile-pictures')
+            .getPublicUrl('$userId/profile.jpg');
+
+        _profilePictureUrl = response;
+      }
+
       notifyListeners();
     } catch (e) {
-      print('Error fetching profile picture: $e');
+      throw Exception('Error fetching profile picture: $e');
     }
   }
 

@@ -155,11 +155,10 @@ class _HomePageState extends State<HomePage>
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            if (Provider.of<UserProfileProvider>(
-                                  context,
-                                  listen: false,
-                                ).profile !=
-                                null) {
+                            if (Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            ).isAuthenticated) {
                               Flushbar(
                                 title: "Error",
                                 message: 'You are already registered',
@@ -168,13 +167,18 @@ class _HomePageState extends State<HomePage>
                                 backgroundColor: TColors.error,
                                 flushbarStyle: FlushbarStyle.FLOATING,
                                 borderRadius: BorderRadius.circular(8.0),
-                                padding: EdgeInsets.all(20.0),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 30.0,
+                                  vertical: 20.0,
+                                ),
                                 margin: EdgeInsets.symmetric(
                                   vertical: 20.0,
                                   horizontal: 10.0,
                                 ),
                                 icon: Lottie.asset(
                                   TImages.animatedError,
+                                  width: 50.0,
+                                  height: 50.0,
                                   repeat: false,
                                 ),
                               ).show(context);

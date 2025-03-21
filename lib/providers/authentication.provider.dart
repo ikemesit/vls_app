@@ -97,4 +97,42 @@ class AuthProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> resetPassword({required String email}) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _authService.resetPassword(email: email);
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  Future<void> updateUser({
+    String? email,
+    String? password,
+    String? displayName,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _authService.updateUser(
+        email: email,
+        password: password,
+        displayName: displayName,
+      );
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
 }

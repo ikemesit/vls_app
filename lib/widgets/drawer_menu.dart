@@ -19,16 +19,18 @@ class DrawerMenu extends StatefulWidget {
 }
 
 class _DrawerMenuState extends State<DrawerMenu> {
-  String profilePicUrl = '';
+  String? profilePicUrl;
   String userId = '';
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getUserProfilePicture(context);
-    });
+    if (Provider.of<AuthProvider>(context, listen: false).isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _getUserProfilePicture(context);
+      });
+    }
   }
 
   void _getUserProfilePicture(BuildContext context) {
@@ -39,12 +41,11 @@ class _DrawerMenuState extends State<DrawerMenu> {
       Provider.of<AuthProvider>(context, listen: false).user!.id,
     );
 
-    String response =
+    String? response =
         Provider.of<ProfilePictureProvider>(
           context,
           listen: false,
-        ).profilePictureUrl ??
-        '';
+        ).profilePictureUrl;
 
     setState(() {
       profilePicUrl = response;
@@ -122,14 +123,14 @@ class _DrawerMenuState extends State<DrawerMenu> {
                   decoration: BoxDecoration(color: TColors.primary),
                   child: Center(
                     child:
-                        profilePicUrl.length == 0
+                        profilePicUrl == null
                             ? CircleAvatar(
                               radius: 100.0,
                               child: Icon(Icons.person, size: 100.0),
                             )
                             : CircleAvatar(
                               radius: 100.0,
-                              foregroundImage: NetworkImage(profilePicUrl),
+                              foregroundImage: NetworkImage(profilePicUrl!),
                             ),
                   ),
                 ),

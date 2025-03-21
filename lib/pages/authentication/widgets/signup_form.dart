@@ -1,7 +1,11 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/pages/user_profile/widgets/user_profile_setup.dart';
 import 'package:vls_app/providers/authentication.provider.dart';
+import 'package:vls_app/utils/constants/colors.dart';
+import 'package:vls_app/utils/constants/image_strings.dart';
 
 import '../../../utils/theme/custom_themes/text_theme.dart';
 
@@ -109,14 +113,32 @@ class _SignUpFormState extends State<SignUpForm> {
                               }
                             } catch (e) {
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(e.toString())),
-                                );
+                                Flushbar(
+                                  title: "Error",
+                                  message: e.toString(),
+                                  duration: Duration(seconds: 3),
+                                  animationDuration: Duration(
+                                    milliseconds: 590,
+                                  ),
+                                  backgroundColor: TColors.error,
+                                  flushbarStyle: FlushbarStyle.FLOATING,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  padding: EdgeInsets.all(20.0),
+                                  margin: EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 10.0,
+                                  ),
+                                  icon: Lottie.asset(
+                                    TImages.animatedError,
+                                    width: 50.0,
+                                    repeat: false,
+                                  ),
+                                ).show(context);
                               }
                             }
                           }
                         },
-                        child: Text('Register'),
+                        child: Text(auth.isLoading ? 'Loading...' : 'Register'),
                       ),
                     ),
               ),

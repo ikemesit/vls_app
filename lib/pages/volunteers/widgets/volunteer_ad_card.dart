@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:vls_app/providers/authentication.provider.dart';
 
 import '../../../models/volunteer_ad.model.dart';
 import '../../../utils/constants/colors.dart';
@@ -23,7 +25,17 @@ class VolunteerAdCard extends StatelessWidget {
         onTap:
             () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => VolunteerAdDetailPage(ad: ad)),
+              MaterialPageRoute(
+                builder:
+                    (_) => VolunteerAdDetailPage(
+                      ad: ad,
+                      userId:
+                          Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          ).user?.id,
+                    ),
+              ),
             ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

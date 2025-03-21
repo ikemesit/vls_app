@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:vls_app/utils/theme/custom_themes/text_theme.dart';
 
 class THelperFunctions {
   static Color? getColor(String value) {
@@ -57,7 +58,11 @@ class THelperFunctions {
         return AlertDialog(
           icon: icon,
           title: Text(title),
-          content: Text(message),
+          content: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TTextTheme.lightTextTheme.bodySmall,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

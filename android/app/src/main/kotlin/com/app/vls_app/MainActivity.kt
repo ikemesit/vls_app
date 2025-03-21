@@ -1,4 +1,4 @@
-package com.vls.vls_app
+package com.app.vls_app
 
 import io.flutter.embedding.android.FlutterActivity
 

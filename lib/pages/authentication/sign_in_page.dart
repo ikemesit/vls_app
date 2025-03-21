@@ -1,7 +1,10 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:vls_app/pages/authentication/sign_up_page.dart';
+import 'package:vls_app/pages/settings/forgot_password_page.dart';
 import 'package:vls_app/providers/authentication.provider.dart';
 import 'package:vls_app/widgets/navigation_layout.dart';
 
@@ -36,7 +39,7 @@ class _SignInPageState extends State<SignInPage> {
             Center(
               child: Image(
                 image: const AssetImage(TImages.loginOrSignupImage),
-                height: 250.0,
+                height: 150.0,
               ),
             ),
             Text(
@@ -92,6 +95,28 @@ class _SignInPageState extends State<SignInPage> {
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
                   ),
+                  Gap(10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder:
+                                  (BuildContext context) =>
+                                      const ForgotPasswordPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Forgot Password? Click here',
+                          style: TTextTheme.lightTextTheme.labelMedium,
+                        ),
+                      ),
+                    ],
+                  ),
                   Gap(40.0),
                   Row(
                     children: [
@@ -112,14 +137,29 @@ class _SignInPageState extends State<SignInPage> {
                                       }
                                     } catch (e) {
                                       if (context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(e.toString()),
-                                            backgroundColor: TColors.error,
+                                        Flushbar(
+                                          title: "Error",
+                                          message: e.toString(),
+                                          duration: Duration(seconds: 3),
+                                          animationDuration: Duration(
+                                            milliseconds: 590,
                                           ),
-                                        );
+                                          backgroundColor: TColors.error,
+                                          flushbarStyle: FlushbarStyle.FLOATING,
+                                          borderRadius: BorderRadius.circular(
+                                            8.0,
+                                          ),
+                                          padding: EdgeInsets.all(20.0),
+                                          margin: EdgeInsets.symmetric(
+                                            vertical: 20.0,
+                                            horizontal: 10.0,
+                                          ),
+                                          icon: Lottie.asset(
+                                            TImages.animatedError,
+                                            width: 50.0,
+                                            repeat: false,
+                                          ),
+                                        ).show(context);
                                       }
                                     }
                                   }
