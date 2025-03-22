@@ -133,6 +133,33 @@ class _SignInPageState extends State<SignInPage> {
                                       );
 
                                       if (context.mounted) {
+                                        Flushbar(
+                                          title: "Success",
+                                          message: "Signed in successfully!",
+                                          duration: Duration(seconds: 3),
+                                          backgroundColor: TColors.success,
+                                          flushbarStyle: FlushbarStyle.FLOATING,
+                                          borderRadius: BorderRadius.circular(
+                                            8.0,
+                                          ),
+                                          padding: EdgeInsets.all(20.0),
+                                          margin: EdgeInsets.symmetric(
+                                            vertical: 20.0,
+                                            horizontal: 10.0,
+                                          ),
+                                          icon: Lottie.asset(
+                                            TImages.animatedSuccess,
+                                            width: 50.0,
+                                            repeat: false,
+                                          ),
+                                        ).show(context);
+                                      }
+
+                                      await Future.delayed(
+                                        const Duration(seconds: 2),
+                                      );
+
+                                      if (context.mounted) {
                                         Navigator.of(context).pop(context);
                                       }
                                     } catch (e) {

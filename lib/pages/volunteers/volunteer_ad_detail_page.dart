@@ -53,118 +53,121 @@ class _VolunteerAdDetailPageState extends State<VolunteerAdDetailPage> {
   Widget build(BuildContext context) {
     final isExpired = widget.ad.expiresAt.isBefore(DateTime.now());
     return Scaffold(
-      appBar: AppBar(title: Text(widget.ad.title)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.ad.title,
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-            ),
-            Gap(16),
-            Text(
-              'Description',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-            ),
-            Gap(8),
-            Html(
-              data: widget.ad.description.replaceAll('&nbsp;', ' '),
-              style: {
-                "p": Style(
-                  whiteSpace: WhiteSpace.pre,
-                  textAlign: TextAlign.left,
-                  display: Display.block,
+      appBar: AppBar(title: Text(widget.ad.title), centerTitle: true),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.ad.title,
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
-              },
-            ),
-            Gap(16),
-            Text(
-              'Created: ${DateFormat('MMM d, yyyy').format(widget.ad.createdAt)}',
-              style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
-            ),
-            Gap(8),
-            Text(
-              'Expires: ${DateFormat('MMM d, yyyy').format(widget.ad.expiresAt)}',
-              style: TextStyle(
-                fontSize: 14.0,
-                color: isExpired ? Colors.red : Colors.grey[700],
-              ),
-            ),
-            if (isExpired) ...[
-              Chip(
-                label: Text('Expired'),
-                backgroundColor: Colors.red[100],
-                labelStyle: TextStyle(color: Colors.red),
-              ),
-            ],
-            Gap(24),
+                Gap(16),
+                Text(
+                  'Description',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+                Gap(8),
+                Html(
+                  data: widget.ad.description.replaceAll('&nbsp;', ' '),
+                  style: {
+                    "p": Style(
+                      whiteSpace: WhiteSpace.pre,
+                      textAlign: TextAlign.left,
+                      display: Display.block,
+                    ),
+                  },
+                ),
+                Gap(16),
+                Text(
+                  'Created: ${DateFormat('MMM d, yyyy').format(widget.ad.createdAt)}',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
+                ),
+                Gap(8),
+                Text(
+                  'Expires: ${DateFormat('MMM d, yyyy').format(widget.ad.expiresAt)}',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: isExpired ? Colors.red : Colors.grey[700],
+                  ),
+                ),
+                if (isExpired) ...[
+                  Chip(
+                    label: Text('Expired'),
+                    backgroundColor: Colors.red[100],
+                    labelStyle: TextStyle(color: Colors.red),
+                  ),
+                ],
+                Gap(24),
 
-            Consumer<AuthProvider>(
-              builder: (context, provider, child) {
-                if (!isExpired) {
-                  if (provider.isAuthenticated) {
-                    if (!isVolunteer) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          try {
-                            Provider.of<VolunteerAdProvider>(
+                Consumer<AuthProvider>(
+                  builder: (context, provider, child) {
+                    if (!isExpired) {
+                      if (provider.isAuthenticated) {
+                        if (!isVolunteer) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              try {
+                                Provider.of<VolunteerAdProvider>(
+                                  context,
+                                  listen: false,
+                                ).confirmUserAsVolunteer(
+                                  widget.ad.id,
+                                  provider.user!.id,
+                                );
+
+                                fetchUserAttendance();
+
+                                THelperFunctions.showAlert(
+                                  context,
+                                  'Success!',
+                                  'You have signed up as a volunteer!.',
+                                  Lottie.asset(
+                                    TImages.animatedSuccess2,
+                                    repeat: false,
+                                    width: 100.0,
+                                    height: 100.0,
+                                  ),
+                                );
+                              } catch (e) {}
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 48),
+                            ),
+                            child: Text('Sign Up to Volunteer'),
+                          );
+                        } else {
+                          return Text(
+                            'You are already registered as a Volunteer',
+                            style: TTextTheme.lightTextTheme.labelMedium
+                                ?.copyWith(color: TColors.success),
+                          );
+                        }
+                      } else {
+                        return OutlinedButton(
+                          onPressed: () {
+                            THelperFunctions.navigateToScreen(
                               context,
-                              listen: false,
-                            ).confirmUserAsVolunteer(
-                              widget.ad.id,
-                              provider.user!.id,
+                              SignInPage(),
                             );
-
-                            fetchUserAttendance();
-
-                            THelperFunctions.showAlert(
-                              context,
-                              'Success!',
-                              'You have signed up as a volunteer!.',
-                              Lottie.asset(
-                                TImages.animatedSuccess2,
-                                repeat: false,
-                                width: 100.0,
-                                height: 100.0,
-                              ),
-                            );
-                          } catch (e) {}
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 48),
-                        ),
-                        child: Text('Sign Up to Volunteer'),
-                      );
-                    } else {
-                      return Text(
-                        'You are already registered as a Volunteer',
-                        style: TTextTheme.lightTextTheme.labelMedium?.copyWith(
-                          color: TColors.success,
-                        ),
-                      );
-                    }
-                  } else {
-                    return OutlinedButton(
-                      onPressed: () {
-                        THelperFunctions.navigateToScreen(
-                          context,
-                          SignInPage(),
+                          },
+                          child: Text(
+                            'Sign in to register as a Volunteer',
+                            style: TTextTheme.lightTextTheme.bodySmall,
+                          ),
                         );
-                      },
-                      child: Text(
-                        'Sign in to register as a Volunteer',
-                        style: TTextTheme.lightTextTheme.bodySmall,
-                      ),
-                    );
-                  }
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
+                      }
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

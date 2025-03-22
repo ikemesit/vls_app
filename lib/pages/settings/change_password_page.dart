@@ -112,6 +112,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                       ),
                                       icon: Lottie.asset(
                                         TImages.animatedSuccess,
+                                        width: 50.0,
                                         repeat: false,
                                       ),
                                     ).show(context);
@@ -135,6 +136,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                       ),
                                       icon: Lottie.asset(
                                         TImages.animatedError,
+                                        width: 50.0,
                                         repeat: false,
                                       ),
                                     ).show(context);

@@ -39,6 +39,18 @@ class VolunteerAdService {
 
   Future<void> confirmUserAsVolunteer(int adId, String userId) async {
     try {
+      final response =
+          await _supabase
+              .from('volunteer_users')
+              .select()
+              .eq('ad_id', adId)
+              .eq('user_id', userId)
+              .maybeSingle();
+
+      if (response != null) {
+        throw Exception('You are already a volunteer!');
+      }
+
       await _supabase.from('volunteer_users').insert({
         'ad_id': adId,
         'user_id': userId,
